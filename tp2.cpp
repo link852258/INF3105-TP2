@@ -8,6 +8,7 @@
 
 #include <fstream>
 #include "stock.h"
+#include <map>
 
 
 int main(int argc, const char** argv) {
@@ -24,7 +25,7 @@ int main(int argc, const char** argv) {
 
     // TODO : ajouter les structures a utiliser
     Stock stock;
-
+    std::map<std::string, Recette> recettes;
     while(*entree){
         std::string commande;
         *entree >> commande;
@@ -32,8 +33,9 @@ int main(int argc, const char** argv) {
         if(commande=="recette"){
             std::string nomrecette;
             *entree >> nomrecette;
-
-            // TODO
+            Recette recette;
+            *entree >> recette;
+            recettes[nomrecette] = recette;
 
         } else if(commande=="ajout") {
             std::string nomingredient;

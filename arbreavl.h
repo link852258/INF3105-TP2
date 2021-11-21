@@ -65,6 +65,7 @@ class ArbreAVL {
     };
     Noeud* racine;
 
+    bool enlever(Noeud*&, const T&);
     // Fonctions internes
     bool inserer(Noeud*&, const T&);
     void rotationGaucheDroite(Noeud*&);
@@ -142,14 +143,14 @@ bool ArbreAVL<T>::contient(const T& element) const
     Noeud* courant = racine;
 
     while(courant != nullptr){
-        if(courant->contenu == element){
-            return true;
-        }
-        else if(courant->contenu < element){
+        if(courant->contenu < element){
             courant = courant->droite;
         }
-        else{
+        else if (element < courant->contenu){
             courant = courant->gauche;
+        }
+        else{
+            return true;
         }
     }
 
@@ -275,7 +276,23 @@ void ArbreAVL<T>::vider(Noeud*& noeud)
 template <class T>
 void ArbreAVL<T>::copier(const Noeud* source, Noeud*& noeud) const
 {
-    // À compléter.
+    /*if(racine == nullptr){
+        inserer(source->contenu);
+    }
+    if(source != nullptr){
+        if(source->gauche != nullptr){
+            copier(source->gauche, noeud);
+            inserer(source->gauche->contenu); 
+        }
+        if(source->droite != nullptr){
+            copier(source->droite, noeud);
+            inserer(source->droite->contenu); 
+        }
+        if(source == racine){
+            delete noeud; 
+            noeud = nullptr;
+        }
+    }*/
 }
 
 template <class T>
@@ -313,7 +330,41 @@ ArbreAVL<T>& ArbreAVL<T>::operator=(const ArbreAVL& autre) {
 template <class T>
 void ArbreAVL<T>::enlever(const T& element)
 {
-    // À compléter.
+    enlever(racine, element);
+}
+
+template <class T>
+bool ArbreAVL<T>::enlever(Noeud*& noeud, const T& element)
+{
+    if(element < noeud->contenu)
+    {
+        if(enlever(noeud->gauche, element))
+        {
+            // ...
+        }
+    }
+    else if(element > noeud->contenu)
+    {
+        if(enlever(noeud->droite, element))
+        {
+            // ...
+        }
+    }
+    else // if(element == noeud->contenu)
+    {
+        if (noeud->gauche==nullptr && noeud->droite==nullptr)
+        {
+            delete noeud;
+            noeud = nullptr;
+            return true;
+        }
+        else
+        {
+            // ...
+            return true;
+        }
+    }
+    
 }
 
 //-----------------------------
@@ -388,7 +439,7 @@ typename ArbreAVL<T>::Iterateur ArbreAVL<T>::rechercher(const T& e) const
             iter.chemin.empiler(n);
             n = n->gauche;
         }
-        else if(e > n->contenu){
+        else if(n->contenu < e){
             n = n->droite;
         }
         else{
@@ -488,7 +539,7 @@ typename ArbreAVL<T>::Iterateur& ArbreAVL<T>::Iterateur::operator++()
         suivant = suivant->gauche;
     }
     if(!chemin.vide())
-        courant.chemin.depiler();
+        courant = chemin.depiler();
     else{
         courant = nullptr;
     }

@@ -9,32 +9,46 @@
 #define STOCK_H
 
 #include <iostream>
-
+#include <map>
 
 class Recette {
+
+    private:
+        std::map<std::string, int> ingredients;
+
+    public:
+        std::map<std::string, int> getIngredients() const;
 
   
     friend std::istream& operator >> (std::istream& is, Recette& recette);
 };
 
-
 class Stock
 {
+    private:
+        
+        std::map<std::string, std::map<std::string, int >> ingredients;
 
-public:
-    Stock();
+        bool ingredientExiste(const std::string& nomIngredient) const;
 
-    void ajout(std::string nomingredient, std::string date, int nombre);
+        bool ingredientQuantiteValide(const std::string& nomIngredient, const int& quantiteRequise) const;
 
-    void retrait(std::string nomingredient, int nombre);
+    public:
+        Stock();
 
-    void affichage();
+        void ajout(std::string nomingredient, std::string date, int nombre);
 
-    std::string dateExpiration(const Recette& recette) const;
+        void retrait(std::string nomingredient, int nombre);
 
-    bool realisable(const Recette& recette) const;
+        void affichage();
 
-    bool utilisation(const Recette& recette);
+        std::string dateExpiration(const Recette& recette) const;
+
+        bool realisable(const Recette& recette) const;
+
+        bool utilisation(const Recette& recette);
+
+        std::map<std::string, std::map<std::string, int>> getIngredients() const;
 
 };
 
