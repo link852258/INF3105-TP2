@@ -2,7 +2,7 @@
 # Adaptez ce fichier au besoin.
 
 # Options standard.
-OPTIONS = -Wall
+#OPTIONS = -Wall
 
 # L'option -g permet de générer les infos de débogage.
 # Décommentez la ligne suivante si vous désirez utiliser un débogueur.
@@ -10,7 +10,7 @@ OPTIONS = -Wall
 
 # Les options -O, -O1, -O2, -O3 permetent d'optimiser le code binaire produit.
 # Décommentez la ligne suivante avant la remise finale
-#OPTIONS = -O2 -Wall
+OPTIONS = -O2 -Wall
 
 
 # Syntaxe : cible : dépendance1 dépendance2 ...
@@ -18,7 +18,7 @@ OPTIONS = -Wall
 all: tp2
 
 tp2: tp2.cpp stock.o
-	g++ $(OPTIONS) -o tp2 tp2.cpp stock.o
+	g++ $(OPTIONS) -o tp2 tp2.cpp stock.o paire.h paire.cpp
 	
 stock.o: stock.h stock.cpp
 	g++ $(OPTIONS) -c -o stock.o stock.cpp

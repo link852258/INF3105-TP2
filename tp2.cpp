@@ -8,6 +8,7 @@
 
 #include <fstream>
 #include "stock.h"
+#include "paire.h"
 #include <map>
 
 
@@ -68,12 +69,25 @@ int main(int argc, const char** argv) {
         } else if(commande=="recommendation") {
             
             // TODO
+            std::map<std::string, Recette> recettesValide;
+            for(const auto& kv : recettes){
+                if(stock.realisable(kv.second))
+                    recettesValide[kv.first] = kv.second;
+            }
+            stock.recommendation(recettesValide);
+
 
         } else if(commande=="utilisation") {
             std::string nomrecette;
             *entree >> nomrecette;
 
-            // TODO
+            if(recettes.count(nomrecette) > 0 && stock.realisable(recettes[nomrecette])){
+                stock.utilisation(recettes[nomrecette]);
+                std::cout << nomrecette << " : " << 1 << std::endl;
+            }
+            else{
+                std::cout << nomrecette << " : " << 0 << std::endl;
+            }
 
         } else if(commande=="affichage") {
             stock.affichage();

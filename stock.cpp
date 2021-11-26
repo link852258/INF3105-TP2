@@ -7,6 +7,7 @@
 */
 
 #include "stock.h"
+#include "paire.h"
 
 
 
@@ -92,11 +93,11 @@ void Stock::affichage(){
         }
         std::cout << quantite << std::endl;
     }
-    std::cout << ";";
+    std::cout << ";" << std::endl;
 }
 
 
-bool Stock::realisable(const Recette& recette) const{
+bool Stock::realisable(const Recette& recette){
     for(const auto& ingredient: recette.getIngredients()){
         if(ingredientExiste(ingredient.first)){
             if(!ingredientQuantiteValide(ingredient.first, ingredient.second)){
@@ -108,13 +109,13 @@ bool Stock::realisable(const Recette& recette) const{
     return true;
 }
 
-bool Stock::ingredientExiste(const std::string& nomIngredient) const{
+bool Stock::ingredientExiste(const std::string& nomIngredient){
     return (ingredients.count(nomIngredient) > 0);
 }
 
-bool Stock::ingredientQuantiteValide(const std::string& nomIngredient, const int& quantiteRequise) const{
+bool Stock::ingredientQuantiteValide(const std::string& nomIngredient, const int& quantiteRequise){
     int quantiteTotale = 0;
-    for(const auto& kv : getIngredients()[nomIngredient]){
+    for(const auto& kv : ingredients[nomIngredient]){
         quantiteTotale += kv.second;
     }
     return (quantiteTotale >= quantiteRequise);
@@ -124,6 +125,60 @@ std::map<std::string, int> Recette::getIngredients() const{
     return ingredients;
 }
 
-std::map<std::string, std::map<std::string, int>> Stock::getIngredients() const{
+std::map<std::string, std::map<std::string, int>> Stock::getIngredients(){
     return ingredients;
 }
+
+void Stock::recommendation(const std::map<std::string, Recette>& recettesValide){
+    Paire paire;
+    paire.setDateExpiration("");
+    std::string dateMin = "";
+    for(const auto& recettes : recettesValide){
+        dateMin = "";
+        for(const auto& ingredient : recettes.second.getIngredients()){
+            if(ingredients[ingredient.first].begin()->first < dateMin || dateMin == "")
+                dateMin = ingredients[ingredient.first].begin()->first;
+        }
+        if(paire.getDateExpiration() == "" || dateMin < paire.getDateExpiration() ){
+            paire.setDateExpiration(dateMin);
+            paire.getListeRecette().clear();
+            paire.getListeRecette().push_back(recettes.first);
+        }
+        else if(dateMin == paire.getDateExpiration()){
+            paire.getListeRecette().push_back(recettes.first);
+        }
+    }
+    for(const auto& value : paire.getListeRecette()){
+        std::cout << value << " ";
+    }
+    std::cout << ";" << std::endl; 
+}
+
+void Stock::utilisation(const Recette& recette){
+    for( const auto& ingredient : recette.getIngredients()){
+        retrait(ingredient.first, ingredient.second);
+    }
+}
+
+/*
+boucler sur les ingredient
+prendre la premiere date d'expiration de l'ingredient
+passer au prochain ingredient
+comparer les dates d'expirations
+trouver les ingredients
+verifier si les recette contiennent au moins un des ingredients
+realisable
+si oui on ajoute
+sinon passe au suivant
+*/
+
+/*
+map recettesFaisable<nomRecette, ingredient>
+for(const auto& kv : recette.getIngredient()){
+    if(kv.second == ingredient){
+
+    }
+}
+
+
+*/

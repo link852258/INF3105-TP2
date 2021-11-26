@@ -10,6 +10,8 @@
 
 #include <iostream>
 #include <map>
+#include <vector>
+#include "paire.h"
 
 class Recette {
 
@@ -29,9 +31,9 @@ class Stock
         
         std::map<std::string, std::map<std::string, int >> ingredients;
 
-        bool ingredientExiste(const std::string& nomIngredient) const;
+        bool ingredientExiste(const std::string& nomIngredient);
 
-        bool ingredientQuantiteValide(const std::string& nomIngredient, const int& quantiteRequise) const;
+        bool ingredientQuantiteValide(const std::string& nomIngredient, const int& quantiteRequise);
 
     public:
         Stock();
@@ -42,13 +44,15 @@ class Stock
 
         void affichage();
 
-        std::string dateExpiration(const Recette& recette) const;
+        std::string dateExpiration(const Recette& recette);
 
-        bool realisable(const Recette& recette) const;
+        bool realisable(const Recette& recette);
 
-        bool utilisation(const Recette& recette);
+        void utilisation(const Recette& recette);
 
-        std::map<std::string, std::map<std::string, int>> getIngredients() const;
+        void recommendation(const std::map<std::string, Recette>& recettesValide);
+
+        std::map<std::string, std::map<std::string, int>> getIngredients();
 
 };
 
